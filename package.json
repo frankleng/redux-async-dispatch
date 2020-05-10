@@ -1,6 +1,6 @@
 {
-  "name": "redux-dispatch-async",
-  "version": "1.0.1",
+  "name": "redux-dispatch-promise",
+  "version": "1.0.4",
   "description": "Dispatch actions based on status of a Promise",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
