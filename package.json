@@ -1,6 +1,6 @@
 {
   "name": "redux-dispatch-promise",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Dispatch actions based on status of a Promise",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

@@ -3,41 +3,49 @@ type DispatchableAction = {
   data?: any;
 };
 
-const successSuffix = '_SUCCESS';
-const failureSuffix = '_FAILURE';
+type AsyncAction = string[];
+
+const successSuffix = '__SUCCESS_ASYNC_ACTION';
+const failureSuffix = '__FAILURE_ASYNC_ACTION';
+
+export function createAsyncActions(constant: string) {
+  return [constant, `${constant}${successSuffix}`, `${constant}${failureSuffix}`];
+}
+
+export function pickInitAction([initAction]: AsyncAction) {
+  return initAction;
+}
+
+export function pickSuccessAction([, successAction]: AsyncAction) {
+  return successAction;
+}
+
+export function pickFailureAction([, , failureAction]: AsyncAction) {
+  return failureAction;
+}
+
+export function matchAnySuccessAction(
+  action: DispatchableAction,
+  matcher?: (type: string, data: any) => boolean,
+): boolean {
+  const isSuccess = !!action.type?.endsWith(successSuffix);
+  return matcher ? isSuccess && matcher(action.type, action.data) : isSuccess;
+}
+
+export function matchAnyFailureAction(
+  action: DispatchableAction,
+  matcher?: (type: string, data: any) => boolean,
+): boolean {
+  const isFailure = !!action.type?.endsWith(failureSuffix);
+  return matcher ? isFailure && matcher(action.type, action.data) : isFailure;
+}
 
 function getDispatchable(action: DispatchableAction | string): DispatchableAction {
   return typeof action === 'string' ? { type: action } : { ...action };
 }
 
-export function getInitAction([initAction]: string[]) {
-  return initAction;
-}
-
-export function getSuccessAction([, successAction]: string[]) {
-  return successAction;
-}
-
-export function getFailureAction([, , failureAction]: string[]) {
-  return failureAction;
-}
-
-export function matchAnySuccessAction(action: DispatchableAction, matcher?: (data: any) => boolean): boolean {
-  const isSuccess = action.type?.endsWith(successSuffix);
-  return matcher && action.data ? isSuccess && matcher(action.data) : isSuccess;
-}
-
-export function matchAnyFailureAction(action: DispatchableAction, matcher?: (data: any) => boolean): boolean {
-  const isFailure = action.type?.endsWith(failureSuffix);
-  return matcher && action.data ? isFailure && matcher(action.data) : isFailure;
-}
-
-export function getActionConstants(constant: string) {
-  return [constant, `${constant}${successSuffix}`, `${constant}${failureSuffix}`];
-}
-
 export function getAsyncDispatch(store: { dispatch: any }) {
-  return (promise: Promise<any>, [initAction, successAction, failureAction]: string[]) => {
+  return async function asyncDispatch(promise: Promise<any>, [initAction, successAction, failureAction]: string[]) {
     const { dispatch } = store;
 
     if (initAction) dispatch(getDispatchable(initAction));

@@ -11,7 +11,7 @@ const appReducer = combineReducers({ account });
 const rootReducer = (state: any, action: any) => {
   //root actions goes here like app-wide logoff
   // use match helper to match any 401 error to trigger logoff
-  if (action.type === LOG_OFF || matchAnyFailure(action, (data) => data.status === 401)) {
+  if (action.type === LOG_OFF || matchAnyFailure(action, (type, data) => data.status === 401)) {
     // setting app state to undefined forces redux to load initial state for all reducers
     state = undefined;
   }
@@ -30,7 +30,7 @@ export const ASYNC_LOGIN = getActionConstants('ACCOUNT/LOGIN');
 // reducer
 export default function accountReducer(state, action) {
   switch (action.type) {
-    case getSuccessAction(ASYNC_LOGIN):
+    case pickSuccessAction(ASYNC_LOGIN):
     // update state here
     default:
       return state;
@@ -46,6 +46,7 @@ export async function callApi() {
 
 ### Changelog
 
+v 1.1.1 - minor refactor, stronger types
 v 1.1.0 - added helpers to match any successful/failed actions. useful for handling actions with app-wide effects - ex. 401 error from a route that should cause entire store to reset.
 
 ---
