@@ -24,7 +24,7 @@ export default store;
 export const dispatchAsync = getAsyncDispatch(store);
 
 // action constants
-export const ASYNC_LOGIN = getActionConstants('ACCOUNT/LOGIN');
+export const ASYNC_LOGIN = createAsyncActions('ACCOUNT/LOGIN');
 // produces ACCOUNT_LOGIN, ACCOUNT_LOGIN_SUCCESS, ACCOUNT_LOGIN_FAILURE
 
 // reducer
