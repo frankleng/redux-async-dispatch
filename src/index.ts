@@ -1,6 +1,7 @@
 type DispatchableAction = {
   type: string;
   data?: any;
+  params?: any;
 };
 
 type AsyncAction = string[];
@@ -45,21 +46,21 @@ function getDispatchable(action: DispatchableAction | string): DispatchableActio
 }
 
 export function getAsyncDispatch(store: { dispatch: any }) {
-  return async function asyncDispatch(promise: Promise<any>, [initAction, successAction, failureAction]: string[]) {
+  return async function asyncDispatch(promise: Promise<any>, [initAction, successAction, failureAction]: string[], params: any) {
     const { dispatch } = store;
 
-    if (initAction) dispatch(getDispatchable(initAction));
+    if (initAction) dispatch({...getDispatchable(initAction), params});
 
     return promise
       .then((data: {}) => {
         if (successAction) {
-          dispatch({ ...getDispatchable(successAction), data });
+          dispatch({ ...getDispatchable(successAction), data, params});
           return data;
         }
       })
       .catch((err) => {
         if (failureAction) {
-          dispatch({ ...getDispatchable(failureAction), data: err });
+          dispatch({ ...getDispatchable(failureAction), data: err, params});
           return err;
         }
       });

@@ -30,6 +30,11 @@ export const ASYNC_LOGIN = createAsyncActions('ACCOUNT/LOGIN');
 // reducer
 export default function accountReducer(state, action) {
   switch (action.type) {
+    /*   
+         action.type: string;
+         action.data?: any;
+         action.params?: any;
+    */
     case pickSuccessAction(ASYNC_LOGIN):
     // update state here
     default:
@@ -40,7 +45,7 @@ export default function accountReducer(state, action) {
 // action creator
 export async function callApi() {
   const promise = await asyncCall();
-  return dispatchAsync(promise, ASYNC_LOGIN);
+  return dispatchAsync(promise, ASYNC_LOGIN, params);  // params are passed through consistently to all action states
 }
 ```
 
