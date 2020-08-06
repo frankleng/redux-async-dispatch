@@ -46,7 +46,7 @@ function getDispatchable(action: DispatchableAction | string): DispatchableActio
 }
 
 export function getAsyncDispatch(store: { dispatch: any }) {
-  return async function asyncDispatch(promise: Promise<any>, [initAction, successAction, failureAction]: string[], params: any) {
+  return async function asyncDispatch(promise: Promise<any>, [initAction, successAction, failureAction]: string[], params?: any) {
     const { dispatch } = store;
 
     if (initAction) dispatch({...getDispatchable(initAction), params});
