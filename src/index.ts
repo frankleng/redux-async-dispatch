@@ -1,3 +1,5 @@
+import { Store } from 'redux';
+
 type DispatchableAction = {
   type: string;
   data?: any;
@@ -45,25 +47,35 @@ function getDispatchable(action: DispatchableAction | string): DispatchableActio
   return typeof action === 'string' ? { type: action } : { ...action };
 }
 
-export function getAsyncDispatch(store: { dispatch: any }) {
-  return async function asyncDispatch(promise: Promise<any>, [initAction, successAction, failureAction]: string[], params?: any) {
-    const { dispatch } = store;
-
-    if (initAction) dispatch({...getDispatchable(initAction), params});
+export function getAsyncDispatch(store: Store) {
+  const { dispatch } = store;
+  return async function asyncDispatch(
+    promise: Promise<any>,
+    [initAction, successAction, failureAction]: string[],
+    params?: any,
+  ) {
+    if (initAction) dispatch({ ...getDispatchable(initAction), params });
 
     return promise
       .then((data: {}) => {
         if (successAction) {
-          dispatch({ ...getDispatchable(successAction), data, params});
+          dispatch({ ...getDispatchable(successAction), data, params });
           return data;
         }
       })
       .catch((err) => {
         if (failureAction) {
-          dispatch({ ...getDispatchable(failureAction), data: err, params});
+          dispatch({ ...getDispatchable(failureAction), data: err, params });
           return err;
         }
       });
+  };
+}
+
+export function getDispatch(store: Store) {
+  const { dispatch } = store;
+  return (action: string, data: any, params?: any) => {
+    dispatch({ ...getDispatchable(action), data, params });
   };
 }
 

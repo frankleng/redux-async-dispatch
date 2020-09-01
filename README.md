@@ -50,7 +50,7 @@ export async function callApi() {
 ```
 
 ### Changelog
-
+v 1.1.5 - add `getDispatch` for sync mutations
 v 1.1.1 - minor refactor, stronger types
 v 1.1.0 - added helpers to match any successful/failed actions. useful for handling actions with app-wide effects - ex. 401 error from a route that should cause entire store to reset.
 
