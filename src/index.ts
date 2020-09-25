@@ -66,7 +66,7 @@ export function getAsyncDispatch(store: Store) {
       .catch((err) => {
         if (failureAction) {
           dispatch({ ...getDispatchable(failureAction), data: err, params });
-          return err;
+          return Promise.reject(err);
         }
       });
   };
