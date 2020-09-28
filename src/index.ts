@@ -60,14 +60,14 @@ export function getAsyncDispatch(store: Store) {
       .then((data: {}) => {
         if (successAction) {
           dispatch({ ...getDispatchable(successAction), data, params });
-          return data;
         }
+        return data;
       })
       .catch((err) => {
         if (failureAction) {
           dispatch({ ...getDispatchable(failureAction), data: err, params });
-          return Promise.reject(err);
         }
+        return Promise.reject(err);
       });
   };
 }
